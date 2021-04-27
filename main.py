@@ -64,13 +64,13 @@ def success(name, username, password):
     frame.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
     user_logout = partial(logout)
 
-    Label(frame, text="Hello, {}".format(name)).grid(row=0, column=1)
-    Label(frame, text="Username: {}".format(username)).grid(row=1, column=1)
-    Label(frame, text="Password: {}".format(password)).grid(row=2, column=1)
+    Label(frame, text="Hello, {}".format(name)).grid(row=0, column=2)
+    Label(frame, text="Username: {}".format(username)).grid(row=1, column=2)
+    Label(frame, text="Password: {}".format(password)).grid(row=2, column=2)
 
     connection = partial(connect, name)
     Button(frame, text="Add Closed Captions", command=connection).grid(row=6, column=2)
-    Button(frame, text="Logout", command=user_logout).grid(row=7, column=3)
+    Button(frame, text="Logout", command=user_logout).grid(row=7, column=2)
 
 
 def logout():
@@ -108,14 +108,14 @@ if __name__ == "__main__":
 
     # window
     tkWindow = Tk()
-    tkWindow.geometry('300x720')
+    tkWindow.geometry('250x200')
     tkWindow.title('Listener')
 
     f1 = Frame(width=200, height=200, background="#ffffff")
-    f2 = Frame(tkWindow, width=400, height=200)
-    f3 = Frame(tkWindow, width=400, height=200)
-    f4 = Frame(tkWindow, width=400, height=200)
-    f5 = Frame(tkWindow, width=400, height=200)
+    f2 = Frame(tkWindow, width=300, height=200)
+    f3 = Frame(tkWindow, width=300, height=200)
+    f4 = Frame(tkWindow, width=300, height=200)
+    f5 = Frame(tkWindow, width=300, height=200)
     f2.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
 
     run()
