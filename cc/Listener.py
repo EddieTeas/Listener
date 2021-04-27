@@ -1,7 +1,7 @@
 import requests
 import speech_recognition as sr
 from tkinter import *
-
+from datetime import date
 
 class Listener:
     def __init__(self, token):
@@ -33,17 +33,24 @@ class Listener:
         self.seq += 1
 
     def run(self):
+        today = date.today()
         self.rec = sr.Recognizer()
         self.mic = sr.Microphone()
-
+        today = str(today) #turns date into a string
+        user ="user E" #wanted to have the user made
         while True:
             try:
                 with self.mic as source:
                     self.rec.adjust_for_ambient_noise(source)
                     try:
+                        f = open("transcript " + today + ".txt", "a") #opens transcript for the day
                         audio = self.rec.listen(source, timeout=self.mic_timeout,
                                                 phrase_time_limit=self.phrase_time_limit)
                         self.payload = self.rec.recognize_google(audio, language=self.post_params['lang'])
+                        print(self.payload)
+                        f.write(user + ": " + str(self.payload))
+                        f.write("\n \n")
+                        f.close()
                     except KeyboardInterrupt:
                         break
                     except sr.WaitTimeoutError:
@@ -59,6 +66,7 @@ class Listener:
                 self.post_transcript(self.payload)
             except KeyboardInterrupt:
                 break
+
 
 
 """
