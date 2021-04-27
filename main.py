@@ -1,0 +1,122 @@
+from data.helper import login, add_user, get_usernames
+from tkinter import *
+from functools import partial
+from user.User import User
+from cc.Listener import Listener
+
+
+def run():
+    frame = f2
+    Label(frame, text="User Name").grid(row=0, column=0)
+    username = StringVar()
+    Entry(frame, textvariable=username).grid(row=0, column=1)
+
+    Label(frame, text="Password").grid(row=1, column=0)
+    password = StringVar()
+    Entry(frame, textvariable=password, show='*').grid(row=1, column=1)
+
+    validate_login = partial(user_login, username, password)
+
+    Button(frame, text="Login", command=validate_login).grid(row=4, column=0)
+
+
+def user_login(username, password):
+    user = login(username.get(), password.get())
+    if user is None:
+        create_account_ui()
+    else:
+        success(user[0], user[1], user[2])
+
+
+def create_account_ui():
+    f2.pack_forget()
+    frame = f3
+    frame.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
+
+    Label(frame, text="Full Name").grid(row=0, column=0)
+    name = StringVar()
+    Entry(frame, textvariable=name).grid(row=0, column=1)
+
+    Label(frame, text="User Name").grid(row=1, column=0)
+    username = StringVar()
+    Entry(frame, textvariable=username).grid(row=1, column=1)
+
+    Label(frame, text="Password").grid(row=2, column=0)
+    password = StringVar()
+    Entry(frame, textvariable=password, show='*').grid(row=2, column=1)
+
+    add_account = partial(create_account, name, username, password)
+
+    Button(frame, text="Create Account", command=add_account).grid(row=4, column=0)
+
+
+def create_account(name, username, password):
+    add_user(name.get(), username.get(), password.get())
+    f3.pack_forget()
+    f2.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
+    run()
+
+
+def success(name, username, password):
+    User(name, username, password)
+    f2.pack_forget()
+    frame = f4
+    frame.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
+    user_logout = partial(logout)
+
+    Label(frame, text="Hello, {}".format(name)).grid(row=0, column=1)
+    Label(frame, text="Username: {}".format(username)).grid(row=1, column=1)
+    Label(frame, text="Password: {}".format(password)).grid(row=2, column=1)
+
+    Button(frame, text="Add Closed Captions", command=connect).grid(row=6, column=2)
+    Button(frame, text="Logout", command=user_logout).grid(row=7, column=3)
+
+
+def logout():
+    f4.pack_forget()
+    f2.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
+    run()
+
+
+def connect():
+    f4.pack_forget()
+    f5.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
+    frame = f5
+
+    Label(frame, text="Enter Zoom API token").grid(row=1, column=1)
+    token = StringVar()
+    Entry(frame, textvariable=token).grid(row=2, column=1)
+
+    zoom_connect = partial(create_connection, token)
+    Button(frame, text="Connect", command=zoom_connect).grid(row=4, column=1)
+
+
+def create_connection(token):
+    listener = Listener(token.get())
+    with listener:
+        listener.run()
+
+
+if __name__ == "__main__":
+    # globals
+    global tkWindow
+    global f2
+    global f3
+    global f4
+    global f5
+
+    # window
+    tkWindow = Tk()
+    tkWindow.geometry('300x250') #the size of the UI
+    tkWindow.title('Listener') #as the name suggests the title of the gui
+
+    f1 = Frame(width=200, height=200, background="#ffffff")
+    f2 = Frame(tkWindow, width=400, height=200)
+    f3 = Frame(tkWindow, width=400, height=200)
+    f4 = Frame(tkWindow, width=400, height=200)
+    f5 = Frame(tkWindow, width=400, height=200)
+    f2.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
+
+    run()
+
+    tkWindow.mainloop()
