@@ -12,7 +12,9 @@ class Listener:
         self.post_params = {'seq': str(self.seq), 'lang': 'en-US'}
         self.payload = ""
         self.mic_timeout = 60000
-        self.phrase_time_limit = 10
+
+        self.phrase_time_limit = 5
+
         self.init_seq()
 
     def __enter__(self):
@@ -32,7 +34,7 @@ class Listener:
         print(request.text)
         self.seq += 1
 
-    def run(self):
+    def run(self, screen_name):
         self.rec = sr.Recognizer()
         self.mic = sr.Microphone()
 
@@ -43,7 +45,7 @@ class Listener:
                     try:
                         audio = self.rec.listen(source, timeout=self.mic_timeout,
                                                 phrase_time_limit=self.phrase_time_limit)
-                        self.payload = self.rec.recognize_google(audio, language=self.post_params['lang'])
+                        self.payload = "{}: {}".format(screen_name, self.rec.recognize_google(audio, language=self.post_params['lang']))
                     except KeyboardInterrupt:
                         break
                     except sr.WaitTimeoutError:

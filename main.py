@@ -64,12 +64,13 @@ def success(name, username, password):
     frame.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
     user_logout = partial(logout)
 
-    Label(frame, text="Hello, {}".format(name)).grid(row=0, column=1)
-    Label(frame, text="Username: {}".format(username)).grid(row=1, column=1)
-    Label(frame, text="Password: {}".format(password)).grid(row=2, column=1)
+    Label(frame, text="Hello, {}".format(name)).grid(row=0, column=2)
+    Label(frame, text="Username: {}".format(username)).grid(row=1, column=2)
+    Label(frame, text="Password: {}".format(password)).grid(row=2, column=2)
 
-    Button(frame, text="Add Closed Captions", command=connect).grid(row=6, column=2)
-    Button(frame, text="Logout", command=user_logout).grid(row=7, column=3)
+    connection = partial(connect, name)
+    Button(frame, text="Add Closed Captions", command=connection).grid(row=6, column=2)
+    Button(frame, text="Logout", command=user_logout).grid(row=7, column=2)
 
 
 def logout():
@@ -78,7 +79,7 @@ def logout():
     run()
 
 
-def connect():
+def connect(screen_name):
     f4.pack_forget()
     f5.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
     frame = f5
@@ -87,14 +88,14 @@ def connect():
     token = StringVar()
     Entry(frame, textvariable=token).grid(row=2, column=1)
 
-    zoom_connect = partial(create_connection, token)
+    zoom_connect = partial(create_connection, token, screen_name)
     Button(frame, text="Connect", command=zoom_connect).grid(row=4, column=1)
 
 
-def create_connection(token):
+def create_connection(token, screen_name):
     listener = Listener(token.get())
     with listener:
-        listener.run()
+        listener.run(screen_name)
 
 
 if __name__ == "__main__":
@@ -107,14 +108,14 @@ if __name__ == "__main__":
 
     # window
     tkWindow = Tk()
-    tkWindow.geometry('300x720')
+    tkWindow.geometry('250x200')
     tkWindow.title('Listener')
 
     f1 = Frame(width=200, height=200, background="#ffffff")
-    f2 = Frame(tkWindow, width=400, height=200)
-    f3 = Frame(tkWindow, width=400, height=200)
-    f4 = Frame(tkWindow, width=400, height=200)
-    f5 = Frame(tkWindow, width=400, height=200)
+    f2 = Frame(tkWindow, width=300, height=200)
+    f3 = Frame(tkWindow, width=300, height=200)
+    f4 = Frame(tkWindow, width=300, height=200)
+    f5 = Frame(tkWindow, width=300, height=200)
     f2.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
 
     run()
