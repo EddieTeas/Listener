@@ -1,6 +1,6 @@
 # Listener
 
-nessicary imports
+necessary imports
   -SpeechRecogonition
   -PyAudio
   -urllib3
