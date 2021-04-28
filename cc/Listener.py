@@ -2,7 +2,6 @@ import requests
 import speech_recognition as sr
 from tkinter import *
 
-
 class Listener:
     def __init__(self, token):
         self.rec = None
