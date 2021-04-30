@@ -70,8 +70,8 @@ def success(name, username, password):
     Label(frame, text="Password: {}".format(password)).grid(row=2, column=2)
 
     connection = partial(connect, name)
-    sample = samples(name)
-    sample = partial(samples.add_sample, name)
+
+    sample = partial(add_voice, name)
     Button(frame, text="Add Voice", command=sample).grid(row=5, column=2)
     Button(frame, text="Add Closed Captions", command=connection).grid(row=6, column=2)
     Button(frame, text="Logout", command=user_logout).grid(row=7, column=2)
@@ -82,20 +82,12 @@ def logout():
     f2.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
     run()
 
-""""
+
 
 def add_voice(name):
     sample = samples(name)
-
-    f4.pack_forget()
-    f6.pack(fill='both', expand=True, padx=0, pady=0, side=TOP)
-    frame = f6
-
-    Label(frame, text='PLease supply a voice sample '+ name).grid(row=1, column=1)
-
     sample = partial(samples.add_sample, name)
-    Button(frame, text="Add Sample ", command=sample).grid(row=5, column=1)
-"""
+
 
 def connect(screen_name):
     f4.pack_forget()
